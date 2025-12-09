@@ -131,7 +131,7 @@ st.write(
 
 st.divider()
 
-col1a, col2a = st.columns([1, 1])
+col1a, col2a = st.columns([2.3, 1])
 
 with col1a:
 # Use columns to organize inputs
