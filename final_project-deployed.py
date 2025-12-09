@@ -143,9 +143,8 @@ fig.update_layout(
             range=[0, 1],
             tickmode="array",
             tickvals=[i/10 for i in range(0, 11)],   # tick marks 0.0, 0.1, ..., 1.0
-            tickfont=dict(size=10)
+            showticklabels=False
         ),
-        angularaxis=dict(showticklabels=False)   # hide outside labels
     ),
     showlegend=False,
     height=450,
