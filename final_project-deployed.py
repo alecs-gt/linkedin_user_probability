@@ -100,16 +100,16 @@ parent_bool = radar_values["Parent"] == 1
 married_bool = radar_values["Married"] == 1
 female_bool = radar_values["Female"] == 1
 
-radar_dict = {
-    "Income": reverse_lookup(income_dict, income_int),
-    "Education": reverse_lookup(education_dict, education_int),
-    "Parent": "Yes" if parent_bool else "No",
-    "Married": "Yes" if married_bool else "No",
-    "Gender": "Female" if female_bool else "Male"
-}
+radar_labels = [
+    f"Income: {reverse_lookup(income_dict, income_int)}",
+    f"Education: {reverse_lookup(education_dict, education_int)}",
+    f"Parent: {"Yes" if parent_bool else "No"}",
+    f"Married: {"Yes" if married_bool else "No"}",
+    f"Gender: {"Female" if female_bool else "Male"}"
+]
 
-labels = list(radar_dict.keys())
-values = list(radar_dict.values())
+labels = list(radar_labels.keys())
+values = list(radar_values.values())
 
 # Close the loop (required for radar charts)
 values_closed = values + values[:1]
