@@ -77,8 +77,8 @@ education_dict = {
 
 st.title("🔮 LinkedIn Usage Probability Predictor")
 st.write(
-    "Enter the demographic information below to estimate the probability "
-    "that a person uses **LinkedIn** based on survey data and logistic regression."
+    "Choose user demographics to predict the probability "
+    "that a person uses **LinkedIn**."
 )
 
 st.divider()
@@ -126,8 +126,3 @@ with colB:
         st.success("Likely **LinkedIn User** 👍")
     else:
         st.error("Unlikely to Use LinkedIn ❌")
-
-st.write(
-    "This prediction is based on demographic survey data used to train a "
-    "logistic regression classifier."
-)
