@@ -100,6 +100,10 @@ parent_bool = radar_values["Parent"] == 1
 married_bool = radar_values["Married"] == 1
 female_bool = radar_values["Female"] == 1
 
+# Outside axis labels (simple)
+theta_labels = ["Income", "Education", "Parent", "Married", "Gender"]
+
+# Inside axis labels (detailed)
 radar_labels = [
     f"Income: {reverse_lookup(income_dict, income_int)}",
     f"Education: {reverse_lookup(education_dict, education_int)}",
@@ -112,9 +116,9 @@ labels = radar_labels
 values = list(radar_values.values())
 
 # Close the loop (required for radar charts)
-values_closed = values + values[:1]
-labels_closed = labels + labels[:1]
-
+theta_closed = theta_labels + [theta_labels[0]]
+values_closed = values + [values[0]]
+custom_closed = radar_labels + [radar_labels[0]]
 # -------------------------------------------------------
 # Build interactive Plotly radar chart
 # -------------------------------------------------------
@@ -122,10 +126,12 @@ fig = go.Figure()
 
 fig.add_trace(go.Scatterpolar(
     r=values_closed,
-    theta=labels_closed,
+    theta=theta_closed,
+    customdata=custom_closed,
     fill='toself',
     name="LinkedIn User Profile",
     line=dict(color='royalblue'),
+    hovertemplate='%{customdata}<extra></extra>',
     fillcolor='rgba(65, 105, 225, 0.3)'
 ))
 
