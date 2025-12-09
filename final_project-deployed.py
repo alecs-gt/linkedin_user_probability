@@ -138,11 +138,18 @@ fig.add_trace(go.Scatterpolar(
 
 fig.update_layout(
     polar=dict(
-        radialaxis=dict(visible=True, range=[0, 1])
+        radialaxis=dict(
+            visible=True,
+            range=[0, 1],
+            tickmode="array",
+            tickvals=[i/10 for i in range(0, 11)],   # tick marks 0.0, 0.1, ..., 1.0
+            tickfont=dict(size=10)
+        ),
+        angularaxis=dict(showticklabels=False)   # hide outside labels
     ),
     showlegend=False,
     height=450,
-    margin=dict(l=40, r=40, t=40, b=40)
+    margin=dict(l=40, r=40, t=40, b=40),
 )
 
 
@@ -168,7 +175,7 @@ with col1:
     gender = st.selectbox("**Gender**", ("Male", "Female"))
 
 with col2:
-    education_sel = st.selectbox("**Education Level**", list(education_dict.keys()))
+    education_sel = st.selectbox("**Education Level**", list(education_dict.keys()), index=6)
     marriage = st.selectbox("**Married?**", ("No", "Yes"))
     age = st.number_input("**Age**", min_value=18, max_value=98, value=47)
 
