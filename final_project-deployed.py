@@ -96,7 +96,9 @@ education_sel = st.selectbox("Select Education Level:",
     "High school graduate",
     "Some college, no degree",
     "Two-year associate degree",
-    "Four-year college or university degree"
+    "Four-year college or university degree",
+    "Some postgraduate or professional schooling, no degree",
+    "Postgraduate or professional degree"
 ))
 
 education = education_dict[education_sel]
