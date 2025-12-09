@@ -110,6 +110,7 @@ radar_labels = [
     f"Parent: {"Yes" if parent_bool else "No"}",
     f"Married: {"Yes" if married_bool else "No"}",
     f"Gender: {"Female" if female_bool else "Male"}"
+    f"Age: {int(round(radar_values["Age"] * 100))} years"
 ]
 
 labels = radar_labels
