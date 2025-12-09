@@ -131,57 +131,54 @@ st.write(
 
 st.divider()
 
-col1a, col2a = st.columns([2.3, 1])
-
-with col1a:
 # Use columns to organize inputs
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
-    with col1:
-        income_sel = st.selectbox("**Income Level**", list(income_dict.keys()))
-        parent = st.selectbox("**Parent of 18+ child?**", ("No", "Yes"))
-        gender = st.selectbox("**Gender**", ("Male", "Female"))
+with col1:
+    income_sel = st.selectbox("**Income Level**", list(income_dict.keys()))
+    parent = st.selectbox("**Parent of 18+ child?**", ("No", "Yes"))
+    gender = st.selectbox("**Gender**", ("Male", "Female"))
 
-    with col2:
-        education_sel = st.selectbox("**Education Level**", list(education_dict.keys()))
-        marriage = st.selectbox("**Married?**", ("No", "Yes"))
-        age = st.number_input("**Age**", min_value=18, max_value=98, value=25)
+with col2:
+    education_sel = st.selectbox("**Education Level**", list(education_dict.keys()))
+    marriage = st.selectbox("**Married?**", ("No", "Yes"))
+    age = st.number_input("**Age**", min_value=18, max_value=98, value=25)
 
 # Build input row
-    input_pred = pd.DataFrame({
-        'income': [income_dict[income_sel]],
-        'education': [education_dict[education_sel]],
-        'parent': [1 if parent == "Yes" else 0],
-        'married': [1 if marriage == "Yes" else 0],
-        'female': [1 if gender == "Female" else 0],
-        'age': [age]
-    })
+input_pred = pd.DataFrame({
+    'income': [income_dict[income_sel]],
+    'education': [education_dict[education_sel]],
+    'parent': [1 if parent == "Yes" else 0],
+    'married': [1 if marriage == "Yes" else 0],
+    'female': [1 if gender == "Female" else 0],
+    'age': [age]
+})
 
 # Predict
-    y_prob = li_logit_2.predict_proba(input_pred)[0][1]
+y_prob = li_logit_2.predict_proba(input_pred)[0][1]
 
-    st.divider()
+st.divider()
 
 # -------------------------------------------------------
 # Output
 # -------------------------------------------------------
-    st.subheader("📊 Prediction Results")
+st.subheader("📊 Prediction Results")
 
-    colA, colB = st.columns(2)
+colA, colB = st.columns(2)
 
-    with colA:
-        st.metric("Probability of LinkedIn Usage", f"{y_prob:.1%}")
+with colA:
+    st.metric("Probability of LinkedIn Usage", f"{y_prob:.1%}")
 
-    with colB:
-        if y_prob >= 0.5:
-            st.success("Likely **LinkedIn User** 👍")
-        else:
-            st.error("Unlikely to Use LinkedIn ❌")
+with colB:
+    if y_prob >= 0.5:
+        st.success("Likely **LinkedIn User** 👍")
+    else:
+        st.error("Unlikely to Use LinkedIn ❌")
 
 # -------------------------------------------------------
 # Display chart
 # -------------------------------------------------------
 
-with col2a:
-    st.subheader("📈 Typical LinkedIn User Radar Profile")
+with st.sidebar:
+    st.sidebar("📈 Typical LinkedIn User Radar Profile")
     st.plotly_chart(fig, use_container_width=True)
