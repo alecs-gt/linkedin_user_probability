@@ -75,55 +75,59 @@ education_dict = {
 # Streamlit App
 ##########################################################
 
-st.title("Linkedin Probability Prediction")
-income_sel = st.selectbox("Select Income Level (1-9):", (
-    "Less than $10,000",   
-    "10 to under $20,000",
-    "20 to under $30,000",
-    "30 to under $40,000",
-    "40 to under $50,000",
-    "50 to under $75,000",
-    "75 to under $100,000",
-    "100 to under $150,000",
-    "$150,000 or more")
-    )
+st.title("🔮 LinkedIn Usage Probability Predictor")
+st.write(
+    "Enter the demographic information below to estimate the probability "
+    "that a person uses **LinkedIn** based on survey data and logistic regression."
+)
 
-income = income_dict[income_sel]
+st.divider()
 
-education_sel = st.selectbox("Select Education Level:",
-    ("Less than high school",
-    "High school incomplete",
-    "High school graduate",
-    "Some college, no degree",
-    "Two-year associate degree",
-    "Four-year college or university degree",
-    "Some postgraduate or professional schooling, no degree",
-    "Postgraduate or professional degree"
-))
+# Use columns to organize inputs
+col1, col2 = st.columns(2)
 
-education = education_dict[education_sel]
+with col1:
+    income_sel = st.selectbox("**Income Level**", list(income_dict.keys()))
+    parent = st.selectbox("**Parent of 18+ child?**", ("No", "Yes"))
+    gender = st.selectbox("**Gender**", ("Male", "Female"))
 
-parent = st.selectbox("Are you a parent of an 18+ child?", ("No", "Yes"))
-marriage = st.selectbox("Are you married?", ("No", "Yes"))
-gender = st.selectbox("Select Gender:", ("Male", "Female"))
-age = st.number_input("Age of user:", min_value=18, max_value=98, value=25)
+with col2:
+    education_sel = st.selectbox("**Education Level**", list(education_dict.keys()))
+    marriage = st.selectbox("**Married?**", ("No", "Yes"))
+    age = st.number_input("**Age**", min_value=18, max_value=98, value=25)
 
+# Build input row
 input_pred = pd.DataFrame({
-    'income': [income],
-    'education': [education],
+    'income': [income_dict[income_sel]],
+    'education': [education_dict[education_sel]],
     'parent': [1 if parent == "Yes" else 0],
     'married': [1 if marriage == "Yes" else 0],
     'female': [1 if gender == "Female" else 0],
     'age': [age]
 })
 
-y_prob = li_logit_2.predict_proba(input_pred)
+# Predict
+y_prob = li_logit_2.predict_proba(input_pred)[0][1]
 
-st.subheader("Predicted Probability of Linkedin Usage")
-st.write(f"Probability of Linkedin Usage: {y_prob[0][1]:.1%}")
+st.divider()
 
-if y_prob[0][1] >= 0.5:
-    st.write("This user is likely to use Linkedin.")
-else:  
-    st.write("This user is unlikely to use Linkedin.")
+# -------------------------------------------------------
+# Output
+# -------------------------------------------------------
+st.subheader("📊 Prediction Results")
 
+colA, colB = st.columns(2)
+
+with colA:
+    st.metric("Probability of LinkedIn Usage", f"{y_prob:.1%}")
+
+with colB:
+    if y_prob >= 0.5:
+        st.success("Likely **LinkedIn User** 👍")
+    else:
+        st.error("Unlikely to Use LinkedIn ❌")
+
+st.write(
+    "This prediction is based on demographic survey data used to train a "
+    "logistic regression classifier."
+)
