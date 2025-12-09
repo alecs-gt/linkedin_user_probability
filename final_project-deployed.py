@@ -11,6 +11,13 @@ import plotly.graph_objects as go
 def clean_sm(x):
     return np.where(x == 1, 1, 0)
 
+def reverse_lookup(d, value):
+    for k, v in d.items():
+        if v == value:
+            return k
+    return None
+
+
 s = pd.read_csv('social_media_usage.csv')
 
 ss = pd.DataFrame({
@@ -87,8 +94,22 @@ radar_values = {
     "Age": li_users["age"].mean() / 100   # scale age 0–1
 }
 
-labels = list(radar_values.keys())
-values = list(radar_values.values())
+income_int = int(round(radar_values["Income"] * 9))
+education_int = int(round(radar_values["Education"] * 9))
+parent_bool = radar_values["Parent"] == 1
+married_bool = radar_values["Married"] == 1
+female_bool = radar_values["Female"] == 1
+
+radar_dict = {
+    "Income": reverse_lookup(income_dict, income_int),
+    "Education": reverse_lookup(education_dict, education_int),
+    "Parent": "Yes" if parent_bool else "No",
+    "Married": "Yes" if married_bool else "No",
+    "Gender": "Female" if female_bool else "Male"
+}
+
+labels = list(radar_dict.keys())
+values = list(radar_dict.values())
 
 # Close the loop (required for radar charts)
 values_closed = values + values[:1]
@@ -179,6 +200,5 @@ with colB:
 # Display chart
 # -------------------------------------------------------
 
-with st.sidebar:
-    st.subheader("📈 Typical LinkedIn User Radar Profile")
-    st.plotly_chart(fig, use_container_width=True)
+st.subheader("📈 Typical LinkedIn User Radar Profile")
+st.plotly_chart(fig, use_container_width=True)
