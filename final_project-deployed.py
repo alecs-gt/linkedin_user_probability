@@ -79,11 +79,11 @@ education_dict = {
 li_users = ss[ss["sm_li"] == 1]
 
 radar_values = {
-    "Income": li_users["income"].mean(),
-    "Education": li_users["education"].mean(),
-    "Parent": li_users["parent"].mean(),
-    "Married": li_users["married"].mean(),
-    "Female": li_users["female"].mean(),
+    "Income": li_users["income"].mean() / 9, # scale income 0–1
+    "Education": li_users["education"].mean() / 9, # scale education 0–1
+    "Parent": li_users["parent"].mean().astype(int),
+    "Married": li_users["married"].mean().astype(int),
+    "Female": li_users["female"].mean().astype(int),
     "Age": li_users["age"].mean() / 100   # scale age 0–1
 }
 
