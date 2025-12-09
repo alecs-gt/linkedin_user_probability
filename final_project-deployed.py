@@ -71,6 +71,48 @@ education_dict = {
     "Postgraduate or professional degree": 8,
 }
 
+# -------------------------------------------------------
+# Compute averages for LinkedIn users
+# -------------------------------------------------------
+li_users = ss[ss["sm_li"] == 1]
+
+radar_values = {
+    "Income": li_users["income"].mean(),
+    "Education": li_users["education"].mean(),
+    "Parent": li_users["parent"].mean() * 8,    # scale 0-1 → 0-8 for radar
+    "Married": li_users["married"].mean() * 8,
+    "Female": li_users["female"].mean() * 8,
+    "Age": li_users["age"].mean() / 12          # scale age to 0–8 range
+}
+
+# Normalize to similar scale (0-8)
+labels = list(radar_values.keys())
+values = list(radar_values.values())
+
+# Close the loop
+values += values[:1]
+
+angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
+angles += angles[:1]
+
+# -------------------------------------------------------
+# Radar Chart
+# -------------------------------------------------------
+fig = plt.figure(figsize=(6, 6))
+ax = plt.subplot(111, polar=True)
+
+ax.plot(angles, values, linewidth=2, color="tab:blue")
+ax.fill(angles, values, color="tab:blue", alpha=0.25)
+
+ax.set_xticks(angles[:-1])
+ax.set_xticklabels(labels, fontsize=12)
+
+ax.set_title("Radar Chart: Most Likely LinkedIn User Demographic", fontsize=14, pad=20)
+ax.set_rlabel_position(0)
+ax.set_yticks([])
+
+st.pyplot(fig)
+
 ##########################################################
 # Streamlit App
 ##########################################################
