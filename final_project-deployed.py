@@ -101,7 +101,7 @@ married_bool = radar_values["Married"] == 1
 female_bool = radar_values["Female"] == 1
 
 # Outside axis labels (simple)
-theta_labels = ["Income", "Education", "Parent", "Married", "Gender"]
+theta_labels = ["Income", "Education", "Parent", "Married", "Gender", "Age"]
 
 # Inside axis labels (detailed)
 radar_labels = [
