@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import streamlit as st
+import plotly.graph_objects as go
 
 def clean_sm(x):
     return np.where(x == 1, 1, 0)
@@ -71,47 +72,68 @@ education_dict = {
     "Postgraduate or professional degree": 8,
 }
 
+
 # -------------------------------------------------------
-# Compute averages for LinkedIn users
+# Compute demographic averages for LinkedIn users
 # -------------------------------------------------------
 li_users = ss[ss["sm_li"] == 1]
 
 radar_values = {
     "Income": li_users["income"].mean(),
     "Education": li_users["education"].mean(),
-    "Parent": li_users["parent"].mean() * 8,    # scale 0-1 → 0-8 for radar
-    "Married": li_users["married"].mean() * 8,
-    "Female": li_users["female"].mean() * 8,
-    "Age": li_users["age"].mean() / 12          # scale age to 0–8 range
+    "Parent": li_users["parent"].mean(),
+    "Married": li_users["married"].mean(),
+    "Female": li_users["female"].mean(),
+    "Age": li_users["age"].mean() / 100   # scale age 0–1
 }
 
-# Normalize to similar scale (0-8)
 labels = list(radar_values.keys())
 values = list(radar_values.values())
 
-# Close the loop
-values += values[:1]
-
-angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
-angles += angles[:1]
+# Close the loop (required for radar charts)
+values_closed = values + values[:1]
+labels_closed = labels + labels[:1]
 
 # -------------------------------------------------------
-# Radar Chart
+# Build interactive Plotly radar chart
 # -------------------------------------------------------
-fig = plt.figure(figsize=(6, 6))
-ax = plt.subplot(111, polar=True)
+fig = go.Figure()
 
-ax.plot(angles, values, linewidth=2, color="tab:blue")
-ax.fill(angles, values, color="tab:blue", alpha=0.25)
+fig.add_trace(go.Scatterpolar(
+    r=values_closed,
+    theta=labels_closed,
+    fill='toself',
+    name="LinkedIn User Profile",
+    line=dict(color='royalblue'),
+    fillcolor='rgba(65, 105, 225, 0.3)'
+))
 
-ax.set_xticks(angles[:-1])
-ax.set_xticklabels(labels, fontsize=12)
+fig.update_layout(
+    polar=dict(
+        radialaxis=dict(visible=True, range=[0, 1])
+    ),
+    showlegend=False,
+    height=450,
+    margin=dict(l=40, r=40, t=40, b=40)
+)
 
-ax.set_title("Radar Chart: Most Likely LinkedIn User Demographic", fontsize=14, pad=20)
-ax.set_rlabel_position(0)
-ax.set_yticks([])
+# -------------------------------------------------------
+# Display in adjacent columns
+# -------------------------------------------------------
+col1, col2 = st.columns([1, 1])
 
-st.pyplot(fig)
+with col1:
+    st.subheader("📊 Prediction Results")
+    st.metric("Probability of LinkedIn Usage", f"{y_prob:.1%}")
+
+    if y_prob >= 0.5:
+        st.success("Likely LinkedIn User 👍")
+    else:
+        st.error("Unlikely to Use LinkedIn ❌")
+
+with col2:
+    st.subheader("📈 Typical LinkedIn User Radar Profile")
+    st.plotly_chart(fig, use_container_width=True)
 
 ##########################################################
 # Streamlit App
