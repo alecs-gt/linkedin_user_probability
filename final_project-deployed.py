@@ -163,14 +163,14 @@ st.divider()
 col1, col2 = st.columns(2)
 
 with col1:
-    income_sel = st.selectbox("**Income Level**", list(income_dict.keys()))
-    parent = st.selectbox("**Parent of 18+ child?**", ("No", "Yes"))
+    income_sel = st.selectbox("**Income Level**", list(income_dict.keys()), index=7)
+    parent = st.selectbox("**Parent of 18+ child?**", ("No", "Yes"), index=0)
     gender = st.selectbox("**Gender**", ("Male", "Female"))
 
 with col2:
     education_sel = st.selectbox("**Education Level**", list(education_dict.keys()))
     marriage = st.selectbox("**Married?**", ("No", "Yes"))
-    age = st.number_input("**Age**", min_value=18, max_value=98, value=25)
+    age = st.number_input("**Age**", min_value=18, max_value=98, value=47)
 
 # Build input row
 input_pred = pd.DataFrame({
