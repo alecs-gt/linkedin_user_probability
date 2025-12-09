@@ -117,23 +117,7 @@ fig.update_layout(
     margin=dict(l=40, r=40, t=40, b=40)
 )
 
-# -------------------------------------------------------
-# Display in adjacent columns
-# -------------------------------------------------------
-col1, col2 = st.columns([1, 1])
 
-with col1:
-    st.subheader("📊 Prediction Results")
-    st.metric("Probability of LinkedIn Usage", f"{y_prob:.1%}")
-
-    if y_prob >= 0.5:
-        st.success("Likely LinkedIn User 👍")
-    else:
-        st.error("Unlikely to Use LinkedIn ❌")
-
-with col2:
-    st.subheader("📈 Typical LinkedIn User Radar Profile")
-    st.plotly_chart(fig, use_container_width=True)
 
 ##########################################################
 # Streamlit App
@@ -190,3 +174,21 @@ with colB:
         st.success("Likely **LinkedIn User** 👍")
     else:
         st.error("Unlikely to Use LinkedIn ❌")
+
+# -------------------------------------------------------
+# Display in adjacent columns
+# -------------------------------------------------------
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.subheader("📊 Prediction Results")
+    st.metric("Probability of LinkedIn Usage", f"{y_prob:.1%}")
+
+    if y_prob >= 0.5:
+        st.success("Likely LinkedIn User 👍")
+    else:
+        st.error("Unlikely to Use LinkedIn ❌")
+
+with col2:
+    st.subheader("📈 Typical LinkedIn User Radar Profile")
+    st.plotly_chart(fig, use_container_width=True)
