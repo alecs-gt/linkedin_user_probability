@@ -180,5 +180,5 @@ with colB:
 # -------------------------------------------------------
 
 with st.sidebar:
-    st.sidebar("📈 Typical LinkedIn User Radar Profile")
+    st.subheader("📈 Typical LinkedIn User Radar Profile")
     st.plotly_chart(fig, use_container_width=True)
