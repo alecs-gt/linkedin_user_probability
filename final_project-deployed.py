@@ -108,7 +108,7 @@ radar_labels = [
     f"Gender: {"Female" if female_bool else "Male"}"
 ]
 
-labels = list(radar_labels.keys())
+labels = radar_labels
 values = list(radar_values.values())
 
 # Close the loop (required for radar charts)
